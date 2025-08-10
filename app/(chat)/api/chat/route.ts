@@ -91,14 +91,15 @@ export async function POST(request: Request) {
       return new ChatSDKError('unauthorized:chat').toResponse();
     }
 
-    const userType: UserType = session.user.type;
+    const userType: UserType = session.user.type || 'guest';
+    const userEntitlements = entitlementsByUserType[userType] || entitlementsByUserType.guest;
 
     const messageCount = await getMessageCountByUserId({
       id: session.user.id,
       differenceInHours: 24,
     });
 
-    if (messageCount > entitlementsByUserType[userType].maxMessagesPerDay) {
+    if (messageCount > userEntitlements.maxMessagesPerDay) {
       return new ChatSDKError('rate_limit:chat').toResponse();
     }
 
@@ -160,11 +161,11 @@ export async function POST(request: Request) {
             selectedChatModel === 'chat-model-reasoning'
               ? []
               : [
-                  'getWeather',
-                  'createDocument',
-                  'updateDocument',
-                  'requestSuggestions',
-                ],
+                'getWeather',
+                'createDocument',
+                'updateDocument',
+                'requestSuggestions',
+              ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
             getWeather,
@@ -222,6 +223,9 @@ export async function POST(request: Request) {
     if (error instanceof ChatSDKError) {
       return error.toResponse();
     }
+
+    console.error('Unexpected error in chat route:', error);
+    return new ChatSDKError('offline:chat').toResponse();
   }
 }
 
