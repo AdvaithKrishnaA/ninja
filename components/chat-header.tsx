@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useWindowSize } from 'usehooks-ts';
 
@@ -37,22 +36,43 @@ function PureChatHeader({
       <SidebarToggle />
 
       {(!open || windowWidth < 768) && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
-              onClick={() => {
-                router.push('/');
-                router.refresh();
-              }}
+        <>
+          <div className="flex items-center">
+            <svg 
+              width="24" 
+              height="24" 
+              viewBox="0 0 340 340" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-foreground"
             >
-              <PlusIcon />
-              <span className="md:sr-only">New Chat</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>New Chat</TooltipContent>
-        </Tooltip>
+              <path 
+                d="M335.273 125.652L205.042 158.079M125.543 3.26639L157.97 135.066M4.72638 214.042L132.342 179.523M214.456 335.382L183.598 208.289M221.344 199.619L215.135 338.32L140.407 221.306L1.70584 215.097L118.72 140.369L124.929 1.66757L199.657 118.682L338.358 124.891L221.344 199.619ZM193.88 172.699C193.881 175.419 193.346 178.112 192.305 180.625C191.265 183.138 189.739 185.422 187.816 187.345C185.893 189.269 183.609 190.795 181.096 191.836C178.584 192.877 175.89 193.413 173.17 193.413C170.45 193.413 167.757 192.877 165.244 191.836C162.731 190.795 160.447 189.269 158.524 187.345C156.601 185.422 155.076 183.138 154.035 180.625C152.995 178.112 152.459 175.419 152.46 172.699C152.459 169.979 152.995 167.285 154.035 164.772C155.076 162.259 156.601 159.975 158.524 158.052C160.447 156.128 162.731 154.602 165.244 153.561C167.757 152.52 170.45 151.984 173.17 151.984C175.89 151.984 178.584 152.52 181.096 153.561C183.609 154.602 185.893 156.128 187.816 158.052C189.739 159.975 191.265 162.259 192.305 164.772C193.346 167.285 193.881 169.979 193.88 172.699Z" 
+                fill="currentColor"
+                stroke="hsl(var(--background))"
+              />
+            </svg>
+            <span className="text-lg font-semibold px-1 rounded-md cursor-pointer">
+              Agent
+            </span>
+          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                className="order-2 md:order-1 md:px-2 px-2 md:h-fit ml-auto md:ml-0"
+                onClick={() => {
+                  router.push('/');
+                  router.refresh();
+                }}
+              >
+                <PlusIcon />
+                <span className="md:sr-only">New Chat</span>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>New Chat</TooltipContent>
+          </Tooltip>
+        </>
       )}
 
       {!isReadonly && (
@@ -70,19 +90,6 @@ function PureChatHeader({
           className="order-1 md:order-3"
         />
       )}
-
-      <Button
-        className="bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-zinc-50 dark:text-zinc-900 hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4 md:ml-auto"
-        asChild
-      >
-        <Link
-          href={`https://vercel.com/new/clone?repository-url=https://github.com/vercel/ai-chatbot&env=AUTH_SECRET&envDescription=Learn more about how to get the API Keys for the application&envLink=https://github.com/vercel/ai-chatbot/blob/main/.env.example&demo-title=AI Chatbot&demo-description=An Open-Source AI Chatbot Template Built With Next.js and the AI SDK by Vercel.&demo-url=https://chat.vercel.ai&products=[{"type":"integration","protocol":"ai","productSlug":"grok","integrationSlug":"xai"},{"type":"integration","protocol":"storage","productSlug":"neon","integrationSlug":"neon"},{"type":"integration","protocol":"storage","productSlug":"upstash-kv","integrationSlug":"upstash"},{"type":"blob"}]`}
-          target="_noblank"
-        >
-          <VercelIcon size={16} />
-          Deploy with Vercel
-        </Link>
-      </Button>
     </header>
   );
 }
